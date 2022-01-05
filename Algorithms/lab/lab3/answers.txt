@@ -1,0 +1,50 @@
+sort1 uses: bubble sort
+
+How do you know?: It's runtime is very slow, but it can have advantages
+in sorted contexts.
+
+sort2 uses: merge sort
+
+How do you know?: It's runtime is very fast, and in almost every samples
+it stays like this.
+
+sort3 uses: selection sort
+
+How do you know?: It's runtime is not fast but not slow, and in every sample it stays
+in this pattern.
+
+random5000 - 1 - 0.138
+             2 - 0.018
+             3 - 0.041
+             
+random10000 - 1 - .524
+              2 - .029
+              3 - .184
+               
+random50000 - 1 - 16.918
+              2 - 3.831
+              3 - 8.615
+               
+reversed5000 - 1 - .124
+               2 - .014
+               3 - .035
+
+reversed10000 - 1 - .352
+                2 - .027
+                3 - .225
+                
+reversed50000 - 1 - 12.997
+                2 - 3.839
+                3 - 8.460
+                
+sorted5000 - 1 - .035
+             2 - .011
+             3 - .111
+             
+sorted10000 - 1 - .029
+              2 - .42
+              3 - .177
+              
+sorted50000 - 1 - 4.586
+              2 - 6.908
+              3 - 8.586
