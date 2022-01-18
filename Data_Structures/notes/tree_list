@@ -1,0 +1,15 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node
+{
+    int number;
+    struct node* right;
+    struct node* left;
+}
+node;
+
+int main(void)
+{
+
+}
