@@ -10,6 +10,8 @@ def main():
         
     database = read_database()
     sequence = read_sequence()
+
+    strs = get_strs(database)
     
     
     
@@ -33,6 +35,17 @@ def read_sequence() -> str:
         sequence = f.read()
         
     return sequence
+    
+    
+def get_strs(database) -> list:
+    
+    strs = []
+    
+    for i in database[0].keys():
+        strs.append(i) 
+        
+    strs = strs[1:]
+    return strs
     
     
 main()
