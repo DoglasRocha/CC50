@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Add code to check answers to questions
+                let feedback = document.querySelector('#feedback');
+                let hasAnswered = false;
+
+                // checking wrong answers
+                let wrongAnswers = document.querySelectorAll('.wrong');
+                wrongAnswers.forEach(button => {
+                    button.addEventListener('click', () => {
+                        if (!hasAnswered)
+                        {
+                            button.style.backgroundColor = 'red';
+                            feedback.style.color = 'red';
+                            feedback.textContent = 'Incorrect!';
+                            hasAnswered = true;
+                        }
+                    });
+                });
+    
+                // checking right answers
+                let rightAnswers = document.querySelectorAll('.right');
+                rightAnswers.forEach(button => {
+                    button.addEventListener('click', () => {
+                        if (!hasAnswered)
+                        {
+                            button.style.backgroundColor = 'green';
+                            feedback.style.color = 'green';
+                            feedback.textContent = 'Correct!';
+                            hasAnswered = true;
+                        }
+                    });
+                });
+
+                let confirm = document.querySelector('#confirm');
+                let freeFeedback = document.querySelector('#free-feedback');
+                confirm.addEventListener('click', () => {
+                    let answer = document.querySelector('input').value;
+                    if (answer.toLowerCase() !== 'cat')
+                    {
+                        freeFeedback.style.color = 'red';
+                        freeFeedback.textContent = 'Incorrect!';
+                    }
+                    else
+                    {  
+                        freeFeedback.style.color = 'green';
+                        freeFeedback.textContent = 'Correct!';
+                    }
+                })
+            });
+        </script>
+
+    </head>
+    <body>
+
+        <div class="jumbotron">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <!-- Add multiple choice question here -->
+                <h3>What is the name of the 2021 F1 World Drivers Champion?</h3>
+                <p id="feedback"></p>
+                <button class="wrong">Lewis Hamilton</button>
+                <button class="right">Max Verstappen</button>
+                <button class="wrong">Nikita Mazepin</button>
+
+
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+
+                <!-- Add free response question here -->
+                <h3>What is the best and cutest animal in the world?</h3>
+                <p id="free-feedback"></p>
+                <input type="text" placeholder="Write your favorite animal here!">
+                <button id="confirm">Confirm</button>
+
+            </div>
+
+        </div>
+    </body>
+</html>
