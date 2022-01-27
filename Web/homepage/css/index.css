@@ -1,0 +1,45 @@
+body
+{
+    background-image: url('../img/books.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#sherlock
+{
+    background-image: url('../img/sherlock.jpg');
+}
+
+#artur
+{
+    background-image: url('../img/artur.jpg');
+}
+
+#percy
+{
+    background-image: url('../img/percy.jpg');
+}
+
+.background
+{
+    background-size: cover;
+    height: 40rem;
+}
+
+.book-title
+{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 32px;
+    text-align: center;
+    padding: 1rem;
+}
+
+.box
+{
+    border: 1px solid #000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+}

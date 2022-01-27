@@ -1,0 +1,36 @@
+*
+{
+    font-family: 'Bebas Neue', 'Times New Roman', Times, serif;
+}
+
+#nav-title
+{
+    font-family: 'Bebas Neue';
+    font-size: 2rem;
+}
+
+.main-title
+{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 48px;
+    text-align: center;
+    padding: 1rem;
+}
+
+.text-shadow
+{
+    background-color: rgba(0, 0, 0, .8);
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid #aaa;
+}
+
+.font 
+{
+    font-family: 'Bebas Neue', 'Times New Roman', Times, serif;
+}
+
+.text
+{
+    font-size: 1.2rem;
+}
