@@ -32,6 +32,38 @@ const name_switcher = name => {
         case 'O Filho de Netuno':
             name = 'The Son of Neptune';
             break;
+
+        case 'O Sinal dos Quatro':
+            name = 'The Sign of the Four';
+            break;
+
+        case 'O Vale do Medo':
+            name = 'The Valley of Fear';
+            break;
+
+        case 'O Retorno de Sherlock Holmes':
+            name = 'The Return of Sherlock Holmes';
+            break;
+
+        case 'O Último Adeus de Sherlock Holmes':
+            name = 'His Last Bow';
+            break;
+
+        case 'Histórias de Sherlock Holmes':
+            name = 'The Case-Book of Sherlock Holmes';
+            break;
+
+        case '1984':
+            name = '1984 (livro)';
+            break;
+
+        case 'A Revolução dos Bichos':
+            name = 'Animal Farm';
+            break;
+
+        case 'A menina que roubava livros':
+            name = 'The Book Thief';
+            break;
     }
 
     return name;
@@ -67,6 +99,7 @@ books.forEach(book => {
 
                 if (page.thumbnail)
                 {   
+                    console.log(page.thumbnail)
                     let page_image = page.thumbnail.source;
                     image.src = page_image;
                     image.alt = name;

@@ -9,6 +9,11 @@
     font-size: 2rem;
 }
 
+#image
+{
+    max-width: 90%;
+}
+
 .main-title
 {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
