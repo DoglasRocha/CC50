@@ -30,7 +30,7 @@ def index():
             return redirect('/date')
         
         year, month, day = date.split('-')
-        db.execute('INSERT INTO birthdays(name, birth, day) VALUES (?, ?, ?, ?)',
+        db.execute('INSERT INTO birthdays(name, month, day) VALUES (?, ?, ?)',
                    name,
                    month,
                    day)
