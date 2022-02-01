@@ -29,12 +29,8 @@ def index():
         if not date:
             return redirect('/date')
         
-        # db.execute('INSERT')
         year, month, day = date.split('-')
-        ids = db.execute('SELECT id FROM birthdays')
-        id = ids[-1]['id'] + 1
-        db.execute('INSERT INTO birthdays VALUES (?, ?, ?, ?)',
-                   id,
+        db.execute('INSERT INTO birthdays(name, birth, day) VALUES (?, ?, ?, ?)',
                    name,
                    month,
                    day)
