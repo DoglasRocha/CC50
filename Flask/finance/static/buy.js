@@ -16,7 +16,7 @@ const alert_things = (textInStock, textInShares) => {
     {
         warning.textContent = '';
     }
-}
+} 
 
 let stock = document.querySelector('#stock');
 let shares = document.querySelector('#shares');
@@ -40,7 +40,7 @@ if (shares.value > 0)
 alert_things(stockHasText, sharesHasText);
 
 stock.addEventListener('keyup', () => {
-    
+
     stockText = stock.value;
     stockHasText = stockText.length > 0;
 
