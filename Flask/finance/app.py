@@ -316,20 +316,14 @@ def sell():
         
         # gets the stock and the amount of shares
         stock = request.form.get('stock')
-        shares = float(request.form.get('shares'))
+        shares = request.form.get('shares')
         
         # error checking
-        if (not stock and not shares):
+        if (not stock or not shares):
             
-            return apology('You have to specify a stock and the amount of shares!')
+            return apology('You have to fill the form correctly!')
         
-        if (not stock):
-            
-            return apology('You have to specify a stock!')
-        
-        if (not shares):
-            
-            return apology('You have to specify the amount of shares!')
+        shares = float(shares)
         
         # gets the stock data and checks for errors
         response = lookup(stock)
@@ -337,13 +331,8 @@ def sell():
         if not response:
             
             return apology('Invalid stock')
-            cash = get_cash()
             
-            updated_cash = cash + profit
-            update_cash(updated_cash)
         # gets the price of the share and calculares the profit
-        price = response['price']
-        profit = price * shares
         
         user_stocks_from_company = get_stocks_from_user_by_company(stock)
         if (not user_stocks_from_company):
@@ -358,8 +347,10 @@ def sell():
                 
                 return apology('You do not have this amount of shares!')
             
-            # gets the user cash and updates it
+            # gets the user cash, calculates the profit and updates it
             cash = get_cash()
+            price = response['price']
+            profit = price * shares
             
             updated_cash = cash + profit
             update_cash(updated_cash)
@@ -421,10 +412,18 @@ def put_in_the_history(stock, shares, price) -> None:
 def update_stocks_number(shares, stock) -> None:
     '''updates the number of a determined stock'''
     
-    db.execute('UPDATE stocks SET shares = ? WHERE id = ? AND stock = ?',
-                       shares,
-                       session['user_id'],
-                       stock)
+    if (shares == 0):
+    
+        db.execute('DELETE FROM stocks WHERE id = ? AND stock = ?',
+                   session['user_id'],
+                   stock)
+    
+    else:
+        
+        db.execute('UPDATE stocks SET shares = ? WHERE id = ? AND stock = ?',
+                   shares,
+                   session['user_id'],
+                   stock)
     
 
 # Listen for errors

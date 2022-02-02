@@ -18,6 +18,7 @@ const alert_things = (textInStock, textInShares) => {
     }
 } 
 
+
 let stock = document.querySelector('#stock');
 let shares = document.querySelector('#shares');
 let warning = document.querySelector('#warning');
@@ -39,6 +40,7 @@ if (shares.value > 0)
 
 alert_things(stockHasText, sharesHasText);
 
+
 stock.addEventListener('keyup', () => {
 
     stockText = stock.value;
@@ -46,6 +48,7 @@ stock.addEventListener('keyup', () => {
 
     alert_things(stockHasText, sharesHasText);
 });
+
 
 shares.addEventListener('keyup', () => {
 
