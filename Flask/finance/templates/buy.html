@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% else %}
+        <form action="/buy" method="POST">
+            <input type="text" name="stock" placeholder="AAPL...">
+            <input type="number" name="shares" placeholder="1">
+            <input class="btn btn-primary" type="submit" value="Buy Stock">
+        </form>
+    {% endif %}
+
+{% endblock %}
