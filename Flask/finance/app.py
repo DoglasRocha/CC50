@@ -264,27 +264,12 @@ def register():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
         
-        # user did not fill the form
+        # error checking
         if (not username
-            and not password
-            and not confirm_password):
+            or not password
+            or not confirm_password):
   
-                return apology('You have to fulfill the form!')
-            
-        # user did not fill the username field
-        if (not username):
-            
-            return apology('You have to create a username!')
-        
-        # user did not fill the password field
-        if (not password):
-            
-            return apology('You have to create a password!')
-        
-        # user did not fill the confirm password field
-        if (not confirm_password):
-            
-            return apology('You have to confirm the password!')
+                return apology('You have to fulfill the form correctly!')
         
         # password has to have more than 8 characters
         if (not re.search('[a-zA-Z0-9]{8,}', password)):
@@ -300,6 +285,7 @@ def register():
         hash_password = generate_password_hash(password)
         db.execute('INSERT INTO users(username, hash) VALUES (?, ?)', username, hash_password)
         
+        flash('Registered!')
         return redirect('/login')
             
     else:

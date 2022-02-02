@@ -31,6 +31,7 @@ let sharesHasText = false;
 if (stock.value.length > 0)
 {
     stockHasText = true;
+    stock.value = stock.value.toUpperCase();
 } 
 
 if (shares.value > 0)
@@ -45,6 +46,7 @@ stock.addEventListener('keyup', () => {
 
     stockText = stock.value;
     stockHasText = stockText.length > 0;
+    stock.value = stock.value.toUpperCase();
 
     alert_things(stockHasText, sharesHasText);
 });
