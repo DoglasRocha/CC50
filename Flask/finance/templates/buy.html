@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
+{% block script %} 
+    <script defer src="../static/buy.js"></script>
+{% endblock %}
+
 {% block title %}
-    Quote
+    Buy
 {% endblock %}
 
 {% block main %}
@@ -9,11 +13,20 @@
     {% if message %}
         <p>{{ message }}</p>
     {% else %}
-        <form action="/buy" method="POST">
-            <input type="text" name="stock" placeholder="AAPL...">
-            <input type="number" name="shares" placeholder="1">
-            <input class="btn btn-primary" type="submit" value="Buy Stock">
-        </form>
+        <section class="container">
+            <form action="/buy" method="POST">
+                <label for="stock">
+                    Stock symbol:
+                    <input type="text" name="stock" id="stock" placeholder="AAPL...">
+                </label>
+                <label for="shares">
+                    Number of shares:
+                    <input type="number" name="shares" id="shares" placeholder="1">
+                </label>
+                <input class="btn btn-primary" type="submit" value="Buy Stock">
+            </form>
+        </section>
+        <p class="text-danger" id="warning"></p>
     {% endif %}
 
 {% endblock %}

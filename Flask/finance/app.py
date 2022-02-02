@@ -48,11 +48,11 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    summ = 0
+    all_money = 0
     
     # gets the cash of the user and puts it into the data that is going to be displayed
     cash = get_cash()
-    summ += cash
+    all_money += cash
     symbol = 'CASH'
     
     table_cell = {
@@ -86,7 +86,7 @@ def index():
         name = response['name']
         price = response['price']
         total = price * shares
-        summ += total
+        all_money += total
         
         table_cell['symbol'] = symbol
         table_cell['name'] = name
@@ -96,7 +96,7 @@ def index():
         
         data.append(table_cell)
     
-    return render_template('index.html', data=data, total_cash=summ)
+    return render_template('index.html', data=data, total_cash=all_money)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -105,27 +105,42 @@ def buy():
     """Buy shares of stock"""
     if request.method == 'POST':
         
+        # gets the stock and the shares required
         stock = request.form.get('stock')
-        shares = float(request.form.get('shares'))
+        shares = request.form.get('shares')
         
+        # error checking
+        if (not stock or not shares):
+            
+            return apology('You have to fill the form correctly!')   
+        
+        shares = float(shares)     
+        
+        # gets the stock data
         response = lookup(stock)
-        
+    
+        # error checking        
         if not response:
             
             return apology('Invalid stock')
         
+        # gets the price and the required money to buy the stocks
         price = response['price']
         required_cash = price * shares
         
+        # gets the user cash and checks if its money is enought to buy the stocks
         cash = get_cash()
         
         if (required_cash > cash):
             
             return apology('Insufficient cash!')
         
+        # updates the user cash
         updated_cash = cash - required_cash
         update_cash(updated_cash)
         
+        # if the user has stocks from the required company, updates the amount of stocks,
+        # if not, just buy it
         user_stocks_from_company = get_stocks_from_user_by_company(stock)
         if (not user_stocks_from_company):
             
@@ -134,29 +149,16 @@ def buy():
                        stock,
                        shares)
             
-            db.execute('INSERT INTO history VALUES (?, ?, ?, ?, ?)',
-                       session['user_id'],
-                       stock, 
-                       shares,
-                       price,
-                       datetime.today())
+            put_in_the_history(stock, shares, price)
             
         else:
             
             current_shares = int(user_stocks_from_company[0]['shares'])
             updated_shares = current_shares + shares
             
-            db.execute('UPDATE stocks SET shares = ? WHERE id = ? AND stock = ?',
-                       updated_shares,
-                       session['user_id'],
-                       stock)
+            update_stocks_number(updated_shares, stock)
             
-            db.execute('INSERT INTO history VALUES (?, ?, ?, ?, ?)',
-                       session['user_id'],
-                       stock, 
-                       shares,
-                       price,
-                       datetime.today())
+            put_in_the_history(stock, shares, price)
         
         flash('Bought!')
         return redirect('/')
@@ -229,16 +231,24 @@ def quote():
     
     if request.method == 'POST':
 
+        # gets the stock from the api and checks for errors
         stock = request.form.get('stock')
+        
+        if not stock:
+            
+            return apology('You must provide a stock!')
+            
         response = lookup(stock)
         
         if not response:
             
             return apology('Connection Error')
         
+        # gets the name and the price of the stock
         name = response['name']
         price = response['price']
         
+        # displays the message to the user
         message = f'A share of {name} ({stock}) costs {usd(float(price))}'
         return render_template('quote.html', message=message)    
         
@@ -301,24 +311,39 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
+    
     if request.method == 'POST':
         
+        # gets the stock and the amount of shares
         stock = request.form.get('stock')
         shares = float(request.form.get('shares'))
         
+        # error checking
+        if (not stock and not shares):
+            
+            return apology('You have to specify a stock and the amount of shares!')
+        
+        if (not stock):
+            
+            return apology('You have to specify a stock!')
+        
+        if (not shares):
+            
+            return apology('You have to specify the amount of shares!')
+        
+        # gets the stock data and checks for errors
         response = lookup(stock)
         
         if not response:
             
             return apology('Invalid stock')
-        
+            cash = get_cash()
+            
+            updated_cash = cash + profit
+            update_cash(updated_cash)
+        # gets the price of the share and calculares the profit
         price = response['price']
         profit = price * shares
-        
-        cash = get_cash()
-        
-        updated_cash = cash + profit
-        update_cash(updated_cash)
         
         user_stocks_from_company = get_stocks_from_user_by_company(stock)
         if (not user_stocks_from_company):
@@ -328,21 +353,25 @@ def sell():
         else:
             
             current_shares = int(user_stocks_from_company[0]['shares'])
+            
+            if (shares > current_shares):
+                
+                return apology('You do not have this amount of shares!')
+            
+            # gets the user cash and updates it
+            cash = get_cash()
+            
+            updated_cash = cash + profit
+            update_cash(updated_cash)
+            
+            # updates the amount of shares and register in the history
             updated_shares = current_shares - shares
             
-            db.execute('UPDATE stocks SET shares = ? WHERE id = ? AND stock = ?',
-                       updated_shares,
-                       session['user_id'],
-                       stock)
+            update_stocks_number(updated_shares, stock)
             
-            db.execute('INSERT INTO history VALUES (?, ?, ?, ?, ?)',
-                       session['user_id'],
-                       stock, 
-                       -shares,
-                       price,
-                       datetime.today())
+            put_in_the_history(stock, -shares, price)
         
-        flash('Bought!')
+        flash('Sold!')
         return redirect('/')
     
     return render_template('sell.html')
@@ -376,6 +405,26 @@ def get_stocks_from_user_by_company(company):
                        company)
     
     return query
+
+
+def put_in_the_history(stock, shares, price) -> None:
+    '''puts the stock bought or sold into the history table'''
+    
+    db.execute('INSERT INTO history VALUES (?, ?, ?, ?, ?)',
+                       session['user_id'],
+                       stock, 
+                       shares,
+                       price,
+                       datetime.today())
+    
+    
+def update_stocks_number(shares, stock) -> None:
+    '''updates the number of a determined stock'''
+    
+    db.execute('UPDATE stocks SET shares = ? WHERE id = ? AND stock = ?',
+                       shares,
+                       session['user_id'],
+                       stock)
     
 
 # Listen for errors
