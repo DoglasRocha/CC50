@@ -61,4 +61,8 @@ def lookup(symbol):
 
 def usd(value):
     """Format value as USD."""
-    return f"${value:,.2f}"
+    if (type(value) == float
+        or type(value) == int):
+        return f"${value:,.2f}"
+    
+    return value

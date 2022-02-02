@@ -18,9 +18,9 @@
             <tbody>
                 {% for stuff in data %}
                 <tr>
-                    <td>{{ stuff.symbol }}</td>
+                    <td>{{ stuff.stock }}</td>
                     <td>{{ stuff.shares }}</td>
-                    <td>{{ stuff.price }}</td>
+                    <td>{{ stuff.price | usd }}</td>
                     <td>{{ stuff.date }}</td>
                 </tr>
                 {% endfor %}

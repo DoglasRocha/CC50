@@ -56,7 +56,7 @@ def index():
     symbol = 'CASH'
     
     table_cell = {
-        'total': usd(cash),
+        'total': cash,
         'symbol': symbol,
         'shares': '',
         'name': '',
@@ -65,13 +65,13 @@ def index():
     data = [table_cell]
     
     # gets the stocks from the user
-    movements = db.execute('SELECT symbol, shares FROM stocks where id = ?',
+    movements = db.execute('SELECT stock, shares FROM stocks where id = ?',
                            session['user_id'])
     
     # iterates over the stocks
     for move in movements:
         
-        symbol = move['symbol']
+        symbol = move['stock']
         shares = move['shares']
         response = lookup(symbol)
         
@@ -91,12 +91,12 @@ def index():
         table_cell['symbol'] = symbol
         table_cell['name'] = name
         table_cell['shares'] = shares
-        table_cell['price'] = usd(price)
-        table_cell['total'] = usd(total)
+        table_cell['price'] = price
+        table_cell['total'] = total
         
         data.append(table_cell)
     
-    return render_template('index.html', data=data, total_cash=usd(summ))
+    return render_template('index.html', data=data, total_cash=summ)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -146,7 +146,7 @@ def buy():
             current_shares = int(user_stocks_from_company[0]['shares'])
             updated_shares = current_shares + shares
             
-            db.execute('UPDATE stocks SET shares = ? WHERE id = ? AND symbol = ?',
+            db.execute('UPDATE stocks SET shares = ? WHERE id = ? AND stock = ?',
                        updated_shares,
                        session['user_id'],
                        stock)
@@ -303,9 +303,47 @@ def sell():
     """Sell shares of stock"""
     if request.method == 'POST':
         
+        stock = request.form.get('stock')
+        shares = float(request.form.get('shares'))
         
+        response = lookup(stock)
         
-        return apology('TODO')
+        if not response:
+            
+            return apology('Invalid stock')
+        
+        price = response['price']
+        profit = price * shares
+        
+        cash = get_cash()
+        
+        updated_cash = cash + profit
+        update_cash(updated_cash)
+        
+        user_stocks_from_company = get_stocks_from_user_by_company(stock)
+        if (not user_stocks_from_company):
+            
+            return apology('You do not own the requested stock!')
+            
+        else:
+            
+            current_shares = int(user_stocks_from_company[0]['shares'])
+            updated_shares = current_shares - shares
+            
+            db.execute('UPDATE stocks SET shares = ? WHERE id = ? AND stock = ?',
+                       updated_shares,
+                       session['user_id'],
+                       stock)
+            
+            db.execute('INSERT INTO history VALUES (?, ?, ?, ?, ?)',
+                       session['user_id'],
+                       stock, 
+                       -shares,
+                       price,
+                       datetime.today())
+        
+        flash('Bought!')
+        return redirect('/')
     
     return render_template('sell.html')
 
@@ -333,7 +371,7 @@ def get_stocks_from_user_by_company(company):
     '''gets the stocks that the user has of a determined company'''
     query = db.execute('''SELECT shares FROM stocks
                               WHERE id = ?
-                              AND symbol = ?''',
+                              AND stock = ?''',
                        session['user_id'],
                        company)
     
