@@ -15,18 +15,24 @@
     {% else %}
         <section class="container">
             <form action="/buy" method="POST">
-                <label for="stock">
-                    Stock symbol:
-                    <input type="text" name="stock" id="stock" placeholder="AAPL...">
-                </label>
-                <label for="shares">
-                    Number of shares:
-                    <input type="number" name="shares" id="shares" placeholder="1">
-                </label>
+                <div class="form-group">
+                    <label for="stock">
+                        Stock symbol:
+                        <input class="form-control" type="text" name="stock" id="stock" placeholder="AAPL...">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="shares">
+                        Number of shares:
+                        <input class="form-control" type="number" name="shares" id="shares" placeholder="1">
+                    </label>
+                </div>
                 <input class="btn btn-primary" type="submit" value="Buy Stock">
             </form>
         </section>
-        <p class="text-danger" id="warning"></p>
+        <div class="container p-3">
+            <p class="text-danger" id="warning"></p>
+        </div>
     {% endif %}
 
 {% endblock %}

@@ -15,13 +15,17 @@
     {% else %}
         <section class="container">
             <form action="/quote" method="POST">
-                <label for="stock">
-                    Stock symbol:
-                    <input type="text" name="stock" id="stock" placeholder="AAPL...">
-                </label>
+                <div class="form-group">
+                    <label for="stock">
+                        Stock symbol:
+                        <input class="form-control" type="text" name="stock" id="stock" placeholder="AAPL...">
+                    </label>
+                </div>
                 <input class="btn btn-primary" type="submit" value="Submit stock query">
             </form>
-            <p class="text-danger" id="warning"></p>
+            <div class="container p-3">
+                <p class="text-danger" id="warning"></p>
+            </div>
         </section>
     {% endif %}
 
