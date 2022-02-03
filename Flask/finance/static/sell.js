@@ -1,19 +1,12 @@
 const alert_things = (textInStock, textInShares) => {
 
-    if (!textInStock && !textInShares)
-    {
+    if (!textInStock && !textInShares) {
         warning.textContent = 'You must provide a stock symbol and a shares number!';
-    }
-    else if (!textInStock)
-    {
+    } else if (!textInStock) {
         warning.textContent = 'You must provide a stock symbol!';
-    }
-    else if (!textInShares)
-    {
+    } else if (!textInShares) {
         warning.textContent = 'You must provide a shares number!';
-    }
-    else
-    {
+    } else {
         warning.textContent = '';
     }
 } 
@@ -28,14 +21,12 @@ let sharesNumber;
 let stockHasText = false;
 let sharesHasText = false;
 
-if (stock.value.length > 0)
-{
+if (stock.value.length > 0) {
     stockHasText = true;
     stock.value = stock.value.toUpperCase();
 } 
 
-if (shares.value > 0)
-{
+if (shares.value > 0) {
     sharesHasText = true;
 }
 

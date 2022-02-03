@@ -1,11 +1,8 @@
 const alert_things = textInStock => {
 
-    if (!textInStock)
-    {
+    if (!textInStock) {
         warning.textContent = 'You must provide a stock symbol!';
-    }
-    else
-    {
+    } else {
         warning.textContent = '';
     }
 } 
@@ -17,8 +14,7 @@ let warning = document.querySelector('#warning');
 let stockText;
 let stockHasText = false;
 
-if (stock.value.length > 0)
-{
+if (stock.value.length > 0) {
     stockHasText = true;
     stock.value = stock.value.toUpperCase();
 } 

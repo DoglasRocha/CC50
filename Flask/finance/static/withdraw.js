@@ -1,11 +1,8 @@
 const alert_things = textInMoney => {
 
-    if (!textInMoney)
-    {
+    if (!textInMoney) {
         warning.textContent = 'You must provide a money amount to withdraw!';
-    }
-    else
-    {
+    } else {
         warning.textContent = '';
     }
 } 
@@ -17,8 +14,7 @@ let warning = document.querySelector('#warning');
 let moneyText;
 let moneyHasText = false;
 
-if (money.value.length > 0)
-{
+if (money.value.length > 0) {
     moneyHasText = true;
 } 
 
