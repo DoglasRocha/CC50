@@ -1,6 +1,4 @@
-from hashlib import new
 import os
-from turtle import update
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -8,7 +6,6 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
-from datetime import datetime
 
 from helpers import (apology, login_required, lookup, usd, get_cash, 
                      update_cash, get_stocks_from_user_by_company, 
@@ -55,7 +52,7 @@ def index():
     
     all_money = 0
     
-    # gets the cash of the user and puts it into the data that is going to be displayed
+    # gets the cash of the user and puts it https://finance.cs50.net/into the data that is going to be displayed
     cash = get_cash(db, session)
     all_money += cash
     symbol = 'CASH'

@@ -63,7 +63,7 @@ def lookup(symbol):
 def usd(value):
     """Format value as USD."""
     if (type(value) == float
-        or type(value) == int):
+            or type(value) == int):
         return f"${value:,.2f}"
     
     return value
@@ -96,11 +96,11 @@ def put_in_the_history(db, session, stock, shares, price) -> None:
     '''puts the stock bought or sold into the history table'''
     
     db.execute('INSERT INTO history VALUES (?, ?, ?, ?, ?)',
-                       session['user_id'],
-                       stock, 
-                       shares,
-                       price,
-                       datetime.today())
+               session['user_id'],
+               stock, 
+               shares,
+               price,
+               datetime.today())
     
     
 def update_stocks_number(db, session, shares, stock) -> None:
