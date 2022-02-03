@@ -11,12 +11,12 @@
 {% block main %}
 
     <section class="container">
-        <form action="/withdrawn" method="POST">
+        <form action="/withdraw" method="POST">
             <label for="money">
-                Money to withdrawn:
+                Money to withdraw:
                 <input type="number" name="money" id="money" placeholder="10000">
             </label>
-            <input class="btn btn-primary" type="submit" value="Withdrawn money">
+            <input class="btn btn-primary" type="submit" value="Withdraw money">
         </form>
         <p class="text-danger" id="warning"></p>
     </section>

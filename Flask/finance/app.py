@@ -367,7 +367,7 @@ def deposit():
     return render_template('deposit.html')
 
 
-@app.route('/withdrawn', methods=['GET', 'POST'])
+@app.route('/withdraw', methods=['GET', 'POST'])
 @login_required
 def withdrawn():
     
@@ -375,7 +375,7 @@ def withdrawn():
     
         return apology('TO DO')
 
-    return render_template('withdrawn.html')
+    return render_template('withdraw.html')
 
 
 def errorhandler(e):
