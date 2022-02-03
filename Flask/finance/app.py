@@ -1,4 +1,6 @@
+from hashlib import new
 import os
+from turtle import update
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -359,10 +361,30 @@ def sell():
 @app.route('/deposit', methods=['GET', 'POST'])
 @login_required
 def deposit():
+    '''deposit money on the investiment account'''
     
     if request.method == 'POST':
         
-        return apology('TO DO')
+        # gets the cash to deposit
+        cash_to_deposit = request.form.get('money')
+        
+        # checking error
+        if (not cash_to_deposit):
+            
+            return apology('You have to fulfill the form correctly!')
+        
+        cash_to_deposit = float(cash_to_deposit)
+        
+        # updates the amount of money on the db
+        current_cash = get_cash(db, session)
+        new_amount = cash_to_deposit + current_cash
+        update_cash(db, session, new_amount)
+        
+        # put in the history db
+        put_in_the_history(db, session, 'DEPOSIT', 1, cash_to_deposit)
+        
+        flash('Deposited!')
+        return redirect('/')
     
     return render_template('deposit.html')
 
@@ -370,10 +392,34 @@ def deposit():
 @app.route('/withdraw', methods=['GET', 'POST'])
 @login_required
 def withdraw():
+    '''withdraw money from the bank account'''
     
     if request.method == 'POST':
     
-        return apology('TO DO')
+        # gets the amount of money to withdraw
+        cash_to_withdrawn = request.form.get('money')
+        
+        # error checking
+        if (not cash_to_withdrawn):
+            
+            return apology('You have to fulfill the form correctly!')
+        
+        cash_to_withdrawn = float(cash_to_withdrawn)
+        
+        current_cash = get_cash(db, session)
+        
+        # checks if the user own enought money to withdraw 
+        if (cash_to_withdrawn > current_cash):
+            
+            return apology('You do not own this amount of money!')
+        
+        # updates the money amount and puts it in the history db
+        new_amount = current_cash - cash_to_withdrawn
+        update_cash(db, session, new_amount)
+        put_in_the_history(db, session, 'WITHDRAW', 1, -cash_to_withdrawn)
+        
+        flash('Withdrawn!')
+        return redirect('/')
 
     return render_template('withdraw.html')
 
