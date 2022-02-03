@@ -10,19 +10,15 @@
 
 {% block main %}
 
-    {% if message %}
-        <p>{{ message }}</p>
-    {% else %}
-        <section class="container">
-            <form action="/quote" method="POST">
-                <label for="stock">
-                    Stock symbol:
-                    <input type="text" name="stock" id="stock" placeholder="AAPL...">
-                </label>
-                <input class="btn btn-primary" type="submit" value="Submit stock query">
-            </form>
-            <p class="text-danger" id="warning"></p>
-        </section>
-    {% endif %}
+    <section class="container">
+        <form action="/withdrawn" method="POST">
+            <label for="money">
+                Money to withdrawn:
+                <input type="number" name="money" id="money" placeholder="10000">
+            </label>
+            <input class="btn btn-primary" type="submit" value="Withdrawn money">
+        </form>
+        <p class="text-danger" id="warning"></p>
+    </section>
 
 {% endblock %}

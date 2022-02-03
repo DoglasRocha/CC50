@@ -229,7 +229,7 @@ def logout():
 @login_required
 def quote():
     
-    message = None
+    message = ''
     
     if request.method == 'POST':
 
@@ -356,18 +356,26 @@ def sell():
     return render_template('sell.html')
 
 
-@app.route('/deposit', method=['GET', 'POST'])
+@app.route('/deposit', methods=['GET', 'POST'])
 @login_required
 def deposit():
     
-    return apology('TO DO')
+    if request.method == 'POST':
+        
+        return apology('TO DO')
+    
+    return render_template('deposit.html')
 
 
-@app.route('/withdrawn', method=['GET', 'POST'])
+@app.route('/withdrawn', methods=['GET', 'POST'])
 @login_required
 def withdrawn():
     
-    return apology('TO DO')
+    if request.method == 'POST':
+    
+        return apology('TO DO')
+
+    return render_template('withdrawn.html')
 
 
 def errorhandler(e):
