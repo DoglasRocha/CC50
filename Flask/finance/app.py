@@ -369,7 +369,7 @@ def deposit():
 
 @app.route('/withdraw', methods=['GET', 'POST'])
 @login_required
-def withdrawn():
+def withdraw():
     
     if request.method == 'POST':
     
