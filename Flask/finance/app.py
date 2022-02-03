@@ -8,7 +8,9 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-from helpers import apology, login_required, lookup, usd
+from helpers import (apology, login_required, lookup, usd, get_cash, 
+                     update_cash, get_stocks_from_user_by_company, 
+                     put_in_the_history, update_stocks_number)
 import re
 
 # Configure application
@@ -51,7 +53,7 @@ def index():
     all_money = 0
     
     # gets the cash of the user and puts it into the data that is going to be displayed
-    cash = get_cash()
+    cash = get_cash(db, session)
     all_money += cash
     symbol = 'CASH'
     
@@ -129,7 +131,7 @@ def buy():
         required_cash = price * shares
         
         # gets the user cash and checks if its money is enought to buy the stocks
-        cash = get_cash()
+        cash = get_cash(db, session)
         
         if (required_cash > cash):
             
@@ -137,11 +139,11 @@ def buy():
         
         # updates the user cash
         updated_cash = cash - required_cash
-        update_cash(updated_cash)
+        update_cash(db, session, updated_cash)
         
         # if the user has stocks from the required company, updates the amount of stocks,
         # if not, just buy it
-        user_stocks_from_company = get_stocks_from_user_by_company(stock)
+        user_stocks_from_company = get_stocks_from_user_by_company(db, session, stock)
         if (not user_stocks_from_company):
             
             db.execute('INSERT INTO stocks VALUES (?, ?, ?)',
@@ -149,16 +151,16 @@ def buy():
                        stock,
                        shares)
             
-            put_in_the_history(stock, shares, price)
+            put_in_the_history(db, session, stock, shares, price)
             
         else:
             
             current_shares = int(user_stocks_from_company[0]['shares'])
             updated_shares = current_shares + shares
             
-            update_stocks_number(updated_shares, stock)
+            update_stocks_number(db, session, updated_shares, stock)
             
-            put_in_the_history(stock, shares, price)
+            put_in_the_history(db, session, stock, shares, price)
         
         flash('Bought!')
         return redirect('/')
@@ -320,7 +322,7 @@ def sell():
             
         # gets the price of the share and calculares the profit
         
-        user_stocks_from_company = get_stocks_from_user_by_company(stock)
+        user_stocks_from_company = get_stocks_from_user_by_company(db, session, stock)
         if (not user_stocks_from_company):
             
             return apology('You do not own the requested stock!')
@@ -334,19 +336,19 @@ def sell():
                 return apology('You do not have this amount of shares!')
             
             # gets the user cash, calculates the profit and updates it
-            cash = get_cash()
+            cash = get_cash(db, session)
             price = response['price']
             profit = price * shares
             
             updated_cash = cash + profit
-            update_cash(updated_cash)
+            update_cash(db, session, updated_cash)
             
             # updates the amount of shares and register in the history
             updated_shares = current_shares - shares
             
-            update_stocks_number(updated_shares, stock)
+            update_stocks_number(db, session, updated_shares, stock)
             
-            put_in_the_history(stock, -shares, price)
+            put_in_the_history(db, session, stock, -shares, price)
         
         flash('Sold!')
         return redirect('/')
@@ -354,62 +356,25 @@ def sell():
     return render_template('sell.html')
 
 
+@app.route('/deposit', method=['GET', 'POST'])
+@login_required
+def deposit():
+    
+    return apology('TO DO')
+
+
+@app.route('/withdrawn', method=['GET', 'POST'])
+@login_required
+def withdrawn():
+    
+    return apology('TO DO')
+
+
 def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):
         e = InternalServerError()
     return apology(e.name, e.code)
-
-
-def get_cash():
-    '''gets the cash from the user'''
-    return float(db.execute('SELECT cash FROM users WHERE id = ?', session['user_id'])[0]['cash'])
-
-
-def update_cash(new_amount) -> None:
-    '''updates the amount of cash of the user'''
-    db.execute('UPDATE users SET cash = ? WHERE id = ?', 
-               new_amount,
-               session['user_id'])    
-
-
-def get_stocks_from_user_by_company(company):
-    '''gets the stocks that the user has of a determined company'''
-    query = db.execute('''SELECT shares FROM stocks
-                              WHERE id = ?
-                              AND stock = ?''',
-                       session['user_id'],
-                       company)
-    
-    return query
-
-
-def put_in_the_history(stock, shares, price) -> None:
-    '''puts the stock bought or sold into the history table'''
-    
-    db.execute('INSERT INTO history VALUES (?, ?, ?, ?, ?)',
-                       session['user_id'],
-                       stock, 
-                       shares,
-                       price,
-                       datetime.today())
-    
-    
-def update_stocks_number(shares, stock) -> None:
-    '''updates the number of a determined stock'''
-    
-    if (shares == 0):
-    
-        db.execute('DELETE FROM stocks WHERE id = ? AND stock = ?',
-                   session['user_id'],
-                   stock)
-    
-    else:
-        
-        db.execute('UPDATE stocks SET shares = ? WHERE id = ? AND stock = ?',
-                   shares,
-                   session['user_id'],
-                   stock)
     
 
 # Listen for errors

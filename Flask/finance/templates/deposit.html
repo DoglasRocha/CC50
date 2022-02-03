@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block script %}
+    <script defer src="../static/quote.js"></script>
+{% endblock %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% else %}
+        <section class="container">
+            <form action="/quote" method="POST">
+                <label for="stock">
+                    Stock symbol:
+                    <input type="text" name="stock" id="stock" placeholder="AAPL...">
+                </label>
+                <input class="btn btn-primary" type="submit" value="Submit stock query">
+            </form>
+            <p class="text-danger" id="warning"></p>
+        </section>
+    {% endif %}
+
+{% endblock %}

@@ -6,18 +6,18 @@
 
 {% block main %}
     <section class="secton">
-        <table class="table">
-            <thead>
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
                 <tr>
-                    <th>Symbol</th>
-                    <th>Shares</th>
-                    <th>Price</th>
-                    <th>Transacted</th>
+                    <th scope="col">Symbol</th>
+                    <th scope="col">Shares</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Transacted</th>
                 </tr>
             </thead>
             <tbody>
                 {% for stuff in data %}
-                <tr>
+                <tr scope="row">
                     <td>{{ stuff.stock }}</td>
                     <td>{{ stuff.shares }}</td>
                     <td>{{ stuff.price | usd }}</td>
