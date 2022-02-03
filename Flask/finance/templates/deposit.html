@@ -12,11 +12,15 @@
 
     <section class="container">
         <form action="/deposit" method="POST">
-            <label for="money">
-                Money to deposit:
-                <input type="number" name="money" id="money" placeholder="10000">
-            </label>
-            <input class="btn btn-primary" type="submit" value="Deposit money">
+            <div class="form-group">
+                <label for="money">
+                    Money to deposit:
+                    <input class="form-control" type="number" name="money" id="money" placeholder="10000">
+                </label>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Deposit money">
+            </div>
         </form>
         <p class="text-danger" id="warning"></p>
     </section>
